@@ -18,13 +18,51 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        title: 'Text Editor',
+      }),
       
     ],
 
     module: {
       rules: [
-        
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+        {
+          test: /\.m?js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+              plugins: ['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime'],
+            },
+          },
+        },
       ],
     },
   };
-};
+}; 
+
+new WebpackPwaManifest({
+  name: 'text-editor',
+  short_name: 'text-editor',
+  description: 'A text editor',
+  background_color: '#ffffff',
+  crossorigin: 'use-credentials',
+  icons: [
+    {
+      src: path.resolve('src/images/logo.png'),
+      sizes: [96, 128, 192, 256, 384, 512],
+      destination: path.join('images', 'icons'),
+    },
+  ],
+});
+
+new InjectManifest({
+  swSrc: './src-sw.js',
+  swDest: 'sw.js',
+});
