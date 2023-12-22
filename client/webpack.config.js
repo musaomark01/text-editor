@@ -22,7 +22,24 @@ module.exports = () => {
         template: './index.html',
         title: 'Text Editor',
       }),
-      
+      new WebpackPwaManifest({
+        name: 'text-editor',
+        short_name: 'text-editor',
+        description: 'A text editor',
+        background_color: '#ffffff',
+        crossorigin: 'use-credentials',
+        icons: [
+          {
+            src: path.resolve('src/images/logo.png'),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join('assets', 'icons'),
+          },
+        ],
+      }),
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest: 'src-sw.js',
+      }),
     ],
 
     module: {
@@ -42,27 +59,12 @@ module.exports = () => {
             },
           },
         },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/resource',
+        }
       ],
     },
   };
 }; 
 
-new WebpackPwaManifest({
-  name: 'text-editor',
-  short_name: 'text-editor',
-  description: 'A text editor',
-  background_color: '#ffffff',
-  crossorigin: 'use-credentials',
-  icons: [
-    {
-      src: path.resolve('src/images/logo.png'),
-      sizes: [96, 128, 192, 256, 384, 512],
-      destination: path.join('images', 'icons'),
-    },
-  ],
-});
-
-new InjectManifest({
-  swSrc: './src-sw.js',
-  swDest: 'sw.js',
-});
